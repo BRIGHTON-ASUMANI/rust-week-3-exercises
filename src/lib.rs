@@ -164,20 +164,29 @@ impl Script {
 
     pub fn to_bytes(&self) -> Vec<u8> {
         // TODO: Prefix with CompactSize (length), then raw bytes
+        let mut compact_len_prefix = CompactSize::new(self.bytes.len() as u64).to_bytes();
+        compact_len_prefix.extend(&self.bytes);
+        compact_len_prefix
     }
 
     pub fn from_bytes(bytes: &[u8]) -> Result<(Self, usize), BitcoinError> {
         // TODO: Parse CompactSize prefix, then read that many bytes
         // Return error if not enough bytes
+        let (len, offset) = CompactSize::from_bytes(bytes)?;
+        let total_compact_len = offset + len.value as usize;
+        if bytes.len() < total_compact_len {
+            return Err(BitcoinError::InsufficientBytes);
+        }
+        Ok((Script::new(bytes[offset..total_compact_len].to_vec()), total_compact_len))
     }
 }
 
-impl Deref for Script {
-    type Target = Vec<u8>;
-    fn deref(&self) -> &Self::Target {
-        // TODO: Allow &Script to be used as &[u8]
-    }
-}
+// impl Deref for Script {
+//     type Target = Vec<u8>;
+//     fn deref(&self) -> &Self::Target {
+//         // TODO: Allow &Script to be used as &[u8]
+//     }
+// }
 
 // #[derive(Debug, PartialEq, Eq, Clone, Serialize, Deserialize)]
 // pub struct TransactionInput {
