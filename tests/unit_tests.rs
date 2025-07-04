@@ -55,16 +55,16 @@ mod tests {
         assert_eq!(consumed, bytes.len());
     }
 
-    // #[test]
-    // fn test_tx_input_roundtrip() {
-    //     let outpoint = OutPoint::new(dummy_txid(1), 0);
-    //     let script = Script::new(vec![0x01, 0x02]);
-    //     let input = TransactionInput::new(outpoint.clone(), script.clone(), 0xFFFFFFFF);
-    //     let bytes = input.to_bytes();
-    //     let (parsed, consumed) = TransactionInput::from_bytes(&bytes).unwrap();
-    //     assert_eq!(parsed, input);
-    //     assert_eq!(consumed, bytes.len());
-    // }
+    #[test]
+    fn test_tx_input_roundtrip() {
+        let outpoint = OutPoint::new(dummy_txid(1), 0);
+        let script = Script::new(vec![0x01, 0x02]);
+        let input = TransactionInput::new(outpoint.clone(), script.clone(), 0xFFFFFFFF);
+        let bytes = input.to_bytes();
+        let (parsed, consumed) = TransactionInput::from_bytes(&bytes).unwrap();
+        assert_eq!(parsed, input);
+        assert_eq!(consumed, bytes.len());
+    }
 
     // #[test]
     // fn test_bitcoin_tx_roundtrip() {

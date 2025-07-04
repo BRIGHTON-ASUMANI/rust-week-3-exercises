@@ -177,40 +177,72 @@ impl Script {
         if bytes.len() < total_compact_len {
             return Err(BitcoinError::InsufficientBytes);
         }
-        Ok((Script::new(bytes[offset..total_compact_len].to_vec()), total_compact_len))
+        Ok((
+            Script::new(bytes[offset..total_compact_len].to_vec()),
+            total_compact_len,
+        ))
     }
 }
 
-// impl Deref for Script {
-//     type Target = Vec<u8>;
-//     fn deref(&self) -> &Self::Target {
-//         // TODO: Allow &Script to be used as &[u8]
-//     }
-// }
+impl Deref for Script {
+    type Target = Vec<u8>;
+    fn deref(&self) -> &Self::Target {
+        // TODO: Allow &Script to be used as &[u8]
+        &self.bytes
+    }
+}
 
-// #[derive(Debug, PartialEq, Eq, Clone, Serialize, Deserialize)]
-// pub struct TransactionInput {
-//     pub previous_output: OutPoint,
-//     pub script_sig: Script,
-//     pub sequence: u32,
-// }
+#[derive(Debug, PartialEq, Eq, Clone, Serialize, Deserialize)]
+pub struct TransactionInput {
+    pub previous_output: OutPoint,
+    pub script_sig: Script,
+    pub sequence: u32,
+}
 
-// impl TransactionInput {
-//     pub fn new(previous_output: OutPoint, script_sig: Script, sequence: u32) -> Self {
-//         // TODO: Basic constructor
-//     }
+impl TransactionInput {
+    pub fn new(previous_output: OutPoint, script_sig: Script, sequence: u32) -> Self {
+        // TODO: Basic constructor
+        TransactionInput {
+            previous_output,
+            script_sig,
+            sequence,
+        }
+    }
 
-//     pub fn to_bytes(&self) -> Vec<u8> {
-//         // TODO: Serialize: OutPoint + Script (with CompactSize) + sequence (4 bytes LE)
-//     }
+    pub fn to_bytes(&self) -> Vec<u8> {
+        // TODO: Serialize: OutPoint + Script (with CompactSize) + sequence (4 bytes LE)
+        let mut result = self.previous_output.to_bytes();
+        result.extend(self.script_sig.to_bytes());
+        result.extend(&self.sequence.to_le_bytes());
+        result
+    }
 
-//     pub fn from_bytes(bytes: &[u8]) -> Result<(Self, usize), BitcoinError> {
-//         // TODO: Deserialize in order:
-//         // - OutPoint (36 bytes)
-//         // - Script (with CompactSize)
-//         // - Sequence (4 bytes)
-//     }
-// }
+    pub fn from_bytes(bytes: &[u8]) -> Result<(Self, usize), BitcoinError> {
+        // TODO: Deserialize in order:
+        // - OutPoint (36 bytes)
+        // - Script (with CompactSize)
+        // - Sequence (4 bytes)
+        let (outpoint, outpoint_consumed) = OutPoint::from_bytes(bytes)?;
+
+        let script_slice = &bytes[outpoint_consumed..];
+        let (script, script_consumed) = Script::from_bytes(script_slice)?;
+
+        let total = outpoint_consumed + script_consumed;
+        if bytes.len() < total + 4 {
+            return Err(BitcoinError::InsufficientBytes);
+        }
+
+        let sequence_bytes = &bytes[total..total + 4];
+        let sequence = u32::from_le_bytes([
+            sequence_bytes[0],
+            sequence_bytes[1],
+            sequence_bytes[2],
+            sequence_bytes[3],
+        ]);
+
+        Ok((TransactionInput::new(outpoint, script, sequence), total + 4))
+    }
+}
 
 // #[derive(Debug, PartialEq, Eq, Clone, Serialize, Deserialize)]
 // pub struct BitcoinTransaction {
