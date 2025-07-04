@@ -97,17 +97,17 @@ mod tests {
         assert!(json.contains("\"lock_time\": 999"));
     }
 
-    // #[test]
-    // fn test_bitcoin_transaction_display() {
-    //     let input = TransactionInput::new(
-    //         OutPoint::new(dummy_txid(0xCD), 7),
-    //         Script::new(vec![0x01, 0x02, 0x03]),
-    //         0xFFFFFFFF,
-    //     );
-    //     let tx = BitcoinTransaction::new(1, vec![input], 0);
-    //     let output = format!("{}", tx);
-    //     assert!(output.contains("Version: 1"));
-    //     assert!(output.contains("Lock Time: 0"));
-    //     assert!(output.contains("Previous Output Vout: 7"));
-    // }
+    #[test]
+    fn test_bitcoin_transaction_display() {
+        let input = TransactionInput::new(
+            OutPoint::new(dummy_txid(0xCD), 7),
+            Script::new(vec![0x01, 0x02, 0x03]),
+            0xFFFFFFFF,
+        );
+        let tx = BitcoinTransaction::new(1, vec![input], 0);
+        let output = format!("{}", tx);
+        assert!(output.contains("Version: 1"));
+        assert!(output.contains("Lock Time: 0"));
+        assert!(output.contains("Previous Output Vout: 7"));
+    }
 }

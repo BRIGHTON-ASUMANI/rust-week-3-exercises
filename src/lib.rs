@@ -283,6 +283,7 @@ impl BitcoinTransaction {
         if bytes.len() < 4 {
             return Err(BitcoinError::InsufficientBytes);
         }
+
         let version = u32::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]);
         let (input_count, mut offset) = CompactSize::from_bytes(&bytes[4..])?;
         offset += 4;
@@ -307,14 +308,23 @@ impl BitcoinTransaction {
 
         Ok((
             BitcoinTransaction::new(version, inputs, lock_time),
-            offset + 4, // Include the 4 bytes of lock_time in the total
+            offset + 4,
         ))
     }
 }
 
-// impl fmt::Display for BitcoinTransaction {
-//     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-//         // TODO: Format a user-friendly string showing version, inputs, lock_time
-//         // Display scriptSig length and bytes, and previous output info
-//     }
-// }
+impl fmt::Display for BitcoinTransaction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        // TODO: Format a user-friendly string showing version, inputs, lock_time
+        // Display scriptSig length and bytes, and previous output info
+        writeln!(f, "Version: {}", self.version)?;
+        for input in &self.inputs {
+            writeln!(
+                f,
+                "Previous Output Vout: {}",
+                input.previous_output.vout
+            )?;
+        }
+        writeln!(f, "Lock Time: {}", self.lock_time)
+    }
+}
