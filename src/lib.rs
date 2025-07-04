@@ -255,10 +255,10 @@ impl BitcoinTransaction {
     pub fn new(version: u32, inputs: Vec<TransactionInput>, lock_time: u32) -> Self {
         // TODO: Construct a transaction from parts
         BitcoinTransaction {
-        version,
-        inputs,
-        lock_time,
-    }
+            version,
+            inputs,
+            lock_time,
+        }
     }
 
     pub fn to_bytes(&self) -> Vec<u8> {
@@ -267,12 +267,48 @@ impl BitcoinTransaction {
         // - CompactSize (number of inputs)
         // - each input serialized
         // - lock_time (4 bytes LE)
+        let mut result = self.version.to_le_bytes().to_vec();
+        result.extend(CompactSize::new(self.inputs.len() as u64).to_bytes());
+        for input in &self.inputs {
+            result.extend(input.to_bytes());
+        }
+        result.extend(&self.lock_time.to_le_bytes());
+        result
     }
 
     pub fn from_bytes(bytes: &[u8]) -> Result<(Self, usize), BitcoinError> {
         // TODO: Read version, CompactSize for input count
         // Parse inputs one by one
         // Read final 4 bytes for lock_time
+        if bytes.len() < 4 {
+            return Err(BitcoinError::InsufficientBytes);
+        }
+        let version = u32::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]);
+        let (input_count, mut offset) = CompactSize::from_bytes(&bytes[4..])?;
+        offset += 4;
+
+        let mut inputs = Vec::new();
+        for _ in 0..input_count.value {
+            let (input, consumed) = TransactionInput::from_bytes(&bytes[offset..])?;
+            offset += consumed;
+            inputs.push(input);
+        }
+
+        if bytes.len() < offset + 4 {
+            return Err(BitcoinError::InsufficientBytes);
+        }
+
+        let lock_time = u32::from_le_bytes([
+            bytes[offset],
+            bytes[offset + 1],
+            bytes[offset + 2],
+            bytes[offset + 3],
+        ]);
+
+        Ok((
+            BitcoinTransaction::new(version, inputs, lock_time),
+            offset + 4, // Include the 4 bytes of lock_time in the total
+        ))
     }
 }
 

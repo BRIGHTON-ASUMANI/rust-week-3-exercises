@@ -80,22 +80,22 @@ mod tests {
         assert_eq!(consumed, bytes.len());
     }
 
-    // #[test]
-    // fn test_bitcoin_tx_json_serialization() {
-    //     let input = TransactionInput::new(
-    //         OutPoint::new(dummy_txid(0xAB), 3),
-    //         Script::new(vec![0xDE, 0xAD, 0xBE, 0xEF]),
-    //         0xABCDEF01,
-    //     );
-    //     let tx = BitcoinTransaction::new(1, vec![input], 999);
+    #[test]
+    fn test_bitcoin_tx_json_serialization() {
+        let input = TransactionInput::new(
+            OutPoint::new(dummy_txid(0xAB), 3),
+            Script::new(vec![0xDE, 0xAD, 0xBE, 0xEF]),
+            0xABCDEF01,
+        );
+        let tx = BitcoinTransaction::new(1, vec![input], 999);
 
-    //     let json = serde_json::to_string_pretty(&tx).unwrap();
-    //     let parsed: BitcoinTransaction = serde_json::from_str(&json).unwrap();
-    //     assert_eq!(tx, parsed);
+        let json = serde_json::to_string_pretty(&tx).unwrap();
+        let parsed: BitcoinTransaction = serde_json::from_str(&json).unwrap();
+        assert_eq!(tx, parsed);
 
-    //     assert!(json.contains("\"version\": 1"));
-    //     assert!(json.contains("\"lock_time\": 999"));
-    // }
+        assert!(json.contains("\"version\": 1"));
+        assert!(json.contains("\"lock_time\": 999"));
+    }
 
     // #[test]
     // fn test_bitcoin_transaction_display() {
