@@ -66,19 +66,19 @@ mod tests {
         assert_eq!(consumed, bytes.len());
     }
 
-    // #[test]
-    // fn test_bitcoin_tx_roundtrip() {
-    //     let inputs = vec![TransactionInput::new(
-    //         OutPoint::new(dummy_txid(1), 0),
-    //         Script::new(vec![0x01, 0x02]),
-    //         0xFFFFFFFF,
-    //     )];
-    //     let tx = BitcoinTransaction::new(2, inputs.clone(), 1000);
-    //     let bytes = tx.to_bytes();
-    //     let (parsed, consumed) = BitcoinTransaction::from_bytes(&bytes).unwrap();
-    //     assert_eq!(parsed, tx);
-    //     assert_eq!(consumed, bytes.len());
-    // }
+    #[test]
+    fn test_bitcoin_tx_roundtrip() {
+        let inputs = vec![TransactionInput::new(
+            OutPoint::new(dummy_txid(1), 0),
+            Script::new(vec![0x01, 0x02]),
+            0xFFFFFFFF,
+        )];
+        let tx = BitcoinTransaction::new(2, inputs.clone(), 1000);
+        let bytes = tx.to_bytes();
+        let (parsed, consumed) = BitcoinTransaction::from_bytes(&bytes).unwrap();
+        assert_eq!(parsed, tx);
+        assert_eq!(consumed, bytes.len());
+    }
 
     // #[test]
     // fn test_bitcoin_tx_json_serialization() {

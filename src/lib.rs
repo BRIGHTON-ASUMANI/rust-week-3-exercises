@@ -244,32 +244,37 @@ impl TransactionInput {
     }
 }
 
-// #[derive(Debug, PartialEq, Eq, Clone, Serialize, Deserialize)]
-// pub struct BitcoinTransaction {
-//     pub version: u32,
-//     pub inputs: Vec<TransactionInput>,
-//     pub lock_time: u32,
-// }
+#[derive(Debug, PartialEq, Eq, Clone, Serialize, Deserialize)]
+pub struct BitcoinTransaction {
+    pub version: u32,
+    pub inputs: Vec<TransactionInput>,
+    pub lock_time: u32,
+}
 
-// impl BitcoinTransaction {
-//     pub fn new(version: u32, inputs: Vec<TransactionInput>, lock_time: u32) -> Self {
-//         // TODO: Construct a transaction from parts
-//     }
+impl BitcoinTransaction {
+    pub fn new(version: u32, inputs: Vec<TransactionInput>, lock_time: u32) -> Self {
+        // TODO: Construct a transaction from parts
+        BitcoinTransaction {
+        version,
+        inputs,
+        lock_time,
+    }
+    }
 
-//     pub fn to_bytes(&self) -> Vec<u8> {
-//         // TODO: Format:
-//         // - version (4 bytes LE)
-//         // - CompactSize (number of inputs)
-//         // - each input serialized
-//         // - lock_time (4 bytes LE)
-//     }
+    pub fn to_bytes(&self) -> Vec<u8> {
+        // TODO: Format:
+        // - version (4 bytes LE)
+        // - CompactSize (number of inputs)
+        // - each input serialized
+        // - lock_time (4 bytes LE)
+    }
 
-//     pub fn from_bytes(bytes: &[u8]) -> Result<(Self, usize), BitcoinError> {
-//         // TODO: Read version, CompactSize for input count
-//         // Parse inputs one by one
-//         // Read final 4 bytes for lock_time
-//     }
-// }
+    pub fn from_bytes(bytes: &[u8]) -> Result<(Self, usize), BitcoinError> {
+        // TODO: Read version, CompactSize for input count
+        // Parse inputs one by one
+        // Read final 4 bytes for lock_time
+    }
+}
 
 // impl fmt::Display for BitcoinTransaction {
 //     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
