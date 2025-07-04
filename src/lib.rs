@@ -151,32 +151,33 @@ impl OutPoint {
     }
 }
 
-// #[derive(Debug, PartialEq, Eq, Clone, Serialize, Deserialize)]
-// pub struct Script {
-//     pub bytes: Vec<u8>,
-// }
+#[derive(Debug, PartialEq, Eq, Clone, Serialize, Deserialize)]
+pub struct Script {
+    pub bytes: Vec<u8>,
+}
 
-// impl Script {
-//     pub fn new(bytes: Vec<u8>) -> Self {
-//         // TODO: Simple constructor
-//     }
+impl Script {
+    pub fn new(bytes: Vec<u8>) -> Self {
+        // TODO: Simple constructor
+        Script { bytes }
+    }
 
-//     pub fn to_bytes(&self) -> Vec<u8> {
-//         // TODO: Prefix with CompactSize (length), then raw bytes
-//     }
+    pub fn to_bytes(&self) -> Vec<u8> {
+        // TODO: Prefix with CompactSize (length), then raw bytes
+    }
 
-//     pub fn from_bytes(bytes: &[u8]) -> Result<(Self, usize), BitcoinError> {
-//         // TODO: Parse CompactSize prefix, then read that many bytes
-//         // Return error if not enough bytes
-//     }
-// }
+    pub fn from_bytes(bytes: &[u8]) -> Result<(Self, usize), BitcoinError> {
+        // TODO: Parse CompactSize prefix, then read that many bytes
+        // Return error if not enough bytes
+    }
+}
 
-// impl Deref for Script {
-//     type Target = Vec<u8>;
-//     fn deref(&self) -> &Self::Target {
-//         // TODO: Allow &Script to be used as &[u8]
-//     }
-// }
+impl Deref for Script {
+    type Target = Vec<u8>;
+    fn deref(&self) -> &Self::Target {
+        // TODO: Allow &Script to be used as &[u8]
+    }
+}
 
 // #[derive(Debug, PartialEq, Eq, Clone, Serialize, Deserialize)]
 // pub struct TransactionInput {

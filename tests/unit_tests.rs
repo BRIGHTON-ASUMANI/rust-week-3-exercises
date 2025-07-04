@@ -45,15 +45,15 @@ mod tests {
         assert_eq!(consumed, bytes.len());
     }
 
-    // #[test]
-    // fn test_script_roundtrip() {
-    //     let script_data = vec![0x76, 0xA9, 0x14, 0x88, 0xAC];
-    //     let script = Script::new(script_data.clone());
-    //     let bytes = script.to_bytes();
-    //     let (parsed, consumed) = Script::from_bytes(&bytes).unwrap();
-    //     assert_eq!(parsed, script);
-    //     assert_eq!(consumed, bytes.len());
-    // }
+    #[test]
+    fn test_script_roundtrip() {
+        let script_data = vec![0x76, 0xA9, 0x14, 0x88, 0xAC];
+        let script = Script::new(script_data.clone());
+        let bytes = script.to_bytes();
+        let (parsed, consumed) = Script::from_bytes(&bytes).unwrap();
+        assert_eq!(parsed, script);
+        assert_eq!(consumed, bytes.len());
+    }
 
     // #[test]
     // fn test_tx_input_roundtrip() {
