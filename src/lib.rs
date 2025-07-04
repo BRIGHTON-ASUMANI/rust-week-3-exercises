@@ -85,17 +85,18 @@ impl CompactSize {
     }
 }
 
-// #[derive(Debug, PartialEq, Eq, Clone)]
-// pub struct Txid(pub [u8; 32]);
+#[derive(Debug, PartialEq, Eq, Clone)]
+pub struct Txid(pub [u8; 32]);
 
-// impl Serialize for Txid {
-//     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-//     where
-//         S: serde::Serializer,
-//     {
-//         // TODO: Serialize as a hex-encoded string (32 bytes => 64 hex characters)
-//     }
-// }
+impl Serialize for Txid {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        // TODO: Serialize as a hex-encoded string (32 bytes => 64 hex characters)
+         serializer.serialize_str(&hex::encode(&self.0))
+    }
+}
 
 // impl<'de> Deserialize<'de> for Txid {
 //     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>

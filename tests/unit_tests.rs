@@ -34,16 +34,16 @@ mod tests {
         }
     }
 
-    // #[test]
-    // fn test_outpoint_roundtrip() {
-    //     let txid = dummy_txid(0xCC);
-    //     let vout = 2;
-    //     let outpoint = OutPoint::new(txid, vout);
-    //     let bytes = outpoint.to_bytes();
-    //     let (parsed, consumed) = OutPoint::from_bytes(&bytes).unwrap();
-    //     assert_eq!(parsed, outpoint);
-    //     assert_eq!(consumed, bytes.len());
-    // }
+    #[test]
+    fn test_outpoint_roundtrip() {
+        let txid = dummy_txid(0xCC);
+        let vout = 2;
+        let outpoint = OutPoint::new(txid, vout);
+        let bytes = outpoint.to_bytes();
+        let (parsed, consumed) = OutPoint::from_bytes(&bytes).unwrap();
+        assert_eq!(parsed, outpoint);
+        assert_eq!(consumed, bytes.len());
+    }
 
     // #[test]
     // fn test_script_roundtrip() {
