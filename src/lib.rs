@@ -319,11 +319,7 @@ impl fmt::Display for BitcoinTransaction {
         // Display scriptSig length and bytes, and previous output info
         writeln!(f, "Version: {}", self.version)?;
         for input in &self.inputs {
-            writeln!(
-                f,
-                "Previous Output Vout: {}",
-                input.previous_output.vout
-            )?;
+            writeln!(f, "Previous Output Vout: {}", input.previous_output.vout)?;
         }
         writeln!(f, "Lock Time: {}", self.lock_time)
     }
